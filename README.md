@@ -5,7 +5,7 @@ POP Identity is a lightweight, low-opinion, mini-library for social and third-pa
 ## Who is this for?
 This is for people who think that the existing ASP.NET Core external login system is too much magic, or too tightly coupled to Identity and/or EntityFramework. It didn't evolve much from the old OWIN days. It has the following goals:
 * Be super light-weight, handing off just enough mundane detail to the library.
-* Allow code to change client ID's, secrets and other parameters at request time, as opposed to the built-in framework that sets this all at startup.
+* Allow code to change client ID's, secrets and other parameters at request time, as opposed to the built-in framework that sets this all at startup. This makes it appropriate for multi-tenant situations.
 * Allow the developer to persist the resulting data (external ID's, name, email, etc.) in whatever manner makes sense. This library has no persistence.
 * Defer authorization logic to the developer.
 
