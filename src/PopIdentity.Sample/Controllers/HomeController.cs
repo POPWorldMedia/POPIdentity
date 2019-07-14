@@ -21,16 +21,21 @@ namespace PopIdentity.Sample.Controllers
     public class HomeController : Controller
     {
 	    private readonly IPopIdentityConfig _popIdentityConfig;
+	    private readonly ILoginLinkFactory _loginLinkFactory;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
+		    _loginLinkFactory = loginLinkFactory;
 	    }
 
 	    public IActionResult Index()
 	    {
 		    ViewBag.GoogleLink = $"https://accounts.google.com/o/oauth2/v2/auth?client_id={_popIdentityConfig.GoogleClientID}&redirect_uri=https%3A%2F%2Flocalhost:44353%2Fhome%2Fcallback&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=1234&response_type=code";
-		    ViewBag.FacebookLink = $"https://www.facebook.com/v3.3/dialog/oauth?client_id={_popIdentityConfig.FacebookAppID}&redirect_uri=https%3A%2F%2Flocalhost:44353%2Fhome%2Fcallbackfb&state=1234";
+
+			// This URL has to be specified in the Facebook developer console under "Valid OAuth Redirect URIs."
+			var facebookRedirect = "https://localhost:44353/home/callbackfb";
+		    ViewBag.FacebookLink = _loginLinkFactory.GetLink(ProviderType.Facebook, facebookRedirect, "1234");
             return View();
         }
 

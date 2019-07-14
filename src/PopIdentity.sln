@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopIdentity.Sample", "PopIdentity.Sample.csproj", "{1A0251C4-34EC-488D-9E3C-12517FE01FE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopIdentity.Sample", "PopIdentity.Sample\PopIdentity.Sample.csproj", "{1A0251C4-34EC-488D-9E3C-12517FE01FE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopIdentity", "..\PopIdentity\PopIdentity.csproj", "{C5634E47-586A-4120-86AC-FDBFC63F2186}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopIdentity", "PopIdentity\PopIdentity.csproj", "{C5634E47-586A-4120-86AC-FDBFC63F2186}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

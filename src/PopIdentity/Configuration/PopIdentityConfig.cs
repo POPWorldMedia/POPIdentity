@@ -4,9 +4,21 @@ namespace PopIdentity.Configuration
 {
 	public interface IPopIdentityConfig
 	{
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Facebook:AppID.
+		/// </summary>
 		string FacebookAppID { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Facebook:AppSecret.
+		/// </summary>
 		string FacebookAppSecret { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Google:ClientID
+		/// </summary>
 		string GoogleClientID { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Google:ClientSecret
+		/// </summary>
 		string GoogleClientSecret { get; }
 	}
 
