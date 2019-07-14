@@ -8,7 +8,7 @@ namespace PopIdentity.Providers.Facebook
 		{
 			var urlEncodedRedirect = HttpUtility.UrlEncode(redirectUrl);
 			var urlEncodedState = HttpUtility.UrlEncode(state);
-			var link = $"{baseUrl}?client_id={clientID}&redirect_uri={urlEncodedRedirect}&state={urlEncodedState}&response_type=code";
+			var link = $"{baseUrl}?client_id={clientID}&redirect_uri={urlEncodedRedirect}&state={urlEncodedState}&response_type=code&scope=email";
 			return link;
 		}
 	}

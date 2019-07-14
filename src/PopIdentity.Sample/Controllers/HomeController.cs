@@ -31,7 +31,7 @@ namespace PopIdentity.Sample.Controllers
 
 	    public IActionResult Index()
 	    {
-		    ViewBag.GoogleLink = $"https://accounts.google.com/o/oauth2/v2/auth?client_id={_popIdentityConfig.GoogleClientID}&redirect_uri=https%3A%2F%2Flocalhost:44353%2Fhome%2Fcallback&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=1234&response_type=code";
+		    ViewBag.GoogleLink = $"https://accounts.google.com/o/oauth2/v2/auth?client_id={_popIdentityConfig.GoogleClientID}&redirect_uri=https%3A%2F%2Flocalhost:44353%2Fhome%2Fcallback&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+email+profile&state=1234&response_type=code";
 
 			// This URL has to be specified in the Facebook developer console under "Valid OAuth Redirect URIs."
 			var facebookRedirect = "https://localhost:44353/home/callbackfb";
