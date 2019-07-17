@@ -10,7 +10,7 @@ This is for people who think that the existing ASP.NET Core external login syste
 * Be super light-weight, handing off just enough mundane detail to the library.
 * Allow code to change client ID's, secrets and other parameters at request time, as opposed to the built-in framework that sets this all at startup. This makes it appropriate for multi-tenant situations.
 * Allow the developer to persist the resulting data (external ID's, name, email, etc.) in whatever manner makes sense. This library has no persistence.
-* Defer authorization logic to the developer.
+* Defer authorization logic to the developer. It doesn't setup any claims identity... that's up to you.
 
 ## Getting started
 The sample web app in the source is the easiest way to see how this works. The `HomeController` has enough comments to see how best to use the framework. The goal is to be able to craft a login experience from scratch at request time, or leverage the configuration values.

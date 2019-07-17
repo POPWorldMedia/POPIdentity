@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PopIdentity.Configuration;
+using PopIdentity.Providers.Facebook;
 using PopIdentity.Sample.Models;
 
 namespace PopIdentity.Sample.Controllers
@@ -22,11 +23,13 @@ namespace PopIdentity.Sample.Controllers
     {
 	    private readonly IPopIdentityConfig _popIdentityConfig;
 	    private readonly ILoginLinkFactory _loginLinkFactory;
+	    private readonly IFacebookCallbackProcessor _facebookCallbackProcessor;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
 		    _loginLinkFactory = loginLinkFactory;
+		    _facebookCallbackProcessor = facebookCallbackProcessor;
 	    }
 
 	    public IActionResult Index()
@@ -43,22 +46,10 @@ namespace PopIdentity.Sample.Controllers
         {
 			// https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
 			// check for state match
-			// get code
-			var code = Request.Query["code"];
-	        var client = new HttpClient();
-	        var appID = _popIdentityConfig.FacebookAppID;
-	        var secret = _popIdentityConfig.FacebookAppSecret;
-	        var redirect = HttpUtility.UrlEncode("https://localhost:44353/home/callbackfb");
-	        var result = await client.GetAsync($"https://graph.facebook.com/v3.3/oauth/access_token?client_id={appID}&redirect_uri={redirect}&client_secret={secret}&code={code}");
-	        var text = await result.Content.ReadAsStringAsync();
-	        var idToken = JObject.Parse(text).Root.SelectToken("access_token").ToString();
-
-	        var userInfoResponse = await client.GetAsync($"https://graph.facebook.com/me?access_token={idToken}&fields=id,name,email");
-			var userInfoText = await userInfoResponse.Content.ReadAsStringAsync();
-			var props = JObject.Parse(userInfoText).Values().Select(x => new { x.Path, Value = x.Value<string>()});
-			// id, name, email
-			var list = props.Aggregate("", (current, item) => current + $"{item.Path}: {item.Value}\r\n");
-
+			var result = await _facebookCallbackProcessor.VerifyCallback(Request, "https://localhost:44353/home/callbackfb");
+			if (!result.IsSuccessful)
+				return Content(result.Message);
+			var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
 			return Content(list);
         }
 
