@@ -7,5 +7,8 @@
 
 	<p><a href="@ViewBag.GoogleLink">login with the google</a></p>
 	
-	<p><a href="@ViewBag.FacebookLink">login with the facebook</a></p>
+	<form asp-action="ExternalLogin">
+		<input type="hidden" name="id" value="facebook"/>
+		<p><input type="submit" class="btn btn-primary" value="Facebook" /></p>
+	</form>
 </div>

@@ -24,12 +24,14 @@ namespace PopIdentity.Sample.Controllers
 	    private readonly IPopIdentityConfig _popIdentityConfig;
 	    private readonly ILoginLinkFactory _loginLinkFactory;
 	    private readonly IFacebookCallbackProcessor _facebookCallbackProcessor;
+	    private readonly IStateHashingService _stateHashingService;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IStateHashingService stateHashingService)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
 		    _loginLinkFactory = loginLinkFactory;
 		    _facebookCallbackProcessor = facebookCallbackProcessor;
+		    _stateHashingService = stateHashingService;
 	    }
 
 	    public IActionResult Index()
@@ -42,10 +44,26 @@ namespace PopIdentity.Sample.Controllers
             return View();
         }
 
+	    [HttpPost]
+	    public IActionResult ExternalLogin(string id)
+	    {
+		    var state = _stateHashingService.SetCookieAndReturnHash();
+		    switch (id.ToLower())
+		    {
+				case "facebook":
+					var facebookRedirect = "https://localhost:44353/home/callbackfb";
+					var link = _loginLinkFactory.GetLink(ProviderType.Facebook, facebookRedirect, state);
+					return Redirect(link);
+				default: throw new NotImplementedException($"The external login \"{id}\" is not configured.");
+		    }
+	    }
+
         public async Task<IActionResult> CallbackFB()
         {
 			// https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-			// check for state match
+			var isStateCorrect = _stateHashingService.VerifyHashAgainstCookie(Request.Query["state"]);
+			if (!isStateCorrect)
+				return Content("State did not match for Facebook.");
 			var result = await _facebookCallbackProcessor.VerifyCallback(Request, "https://localhost:44353/home/callbackfb");
 			if (!result.IsSuccessful)
 				return Content(result.Message);

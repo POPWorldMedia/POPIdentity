@@ -22,6 +22,9 @@ namespace PopIdentity.Sample
 			// get the DI for POP Identity
 			services.AddPopIdentity();
 
+			// POP Identity needs this, and your app might too, to get IHttpContextAccessor via DI
+			services.AddHttpContextAccessor();
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
