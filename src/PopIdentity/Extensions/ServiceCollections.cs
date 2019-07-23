@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PopIdentity.Configuration;
 using PopIdentity.Providers.Facebook;
+using PopIdentity.Providers.Google;
 
 namespace PopIdentity.Extensions
 {
@@ -14,6 +15,8 @@ namespace PopIdentity.Extensions
 			serviceCollection.AddTransient<IPopIdentityConfig, PopIdentityConfig>();
 
 			serviceCollection.AddTransient<IFacebookCallbackProcessor, FacebookCallbackProcessor>();
+
+			serviceCollection.AddTransient<IGoogleCallbackProcessor, GoogleCallbackProcessor>();
 
 			return serviceCollection;
 		}

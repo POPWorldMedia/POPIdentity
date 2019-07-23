@@ -2,9 +2,9 @@
 
 namespace PopIdentity.Providers.Facebook
 {
-	public class FacebookLinkGenerator
+	public class FacebookLoginUrlGenerator
 	{
-		public string GetLink(string baseUrl, string clientID, string redirectUrl, string state)
+		public string GetUrl(string baseUrl, string clientID, string redirectUrl, string state)
 		{
 			var urlEncodedRedirect = HttpUtility.UrlEncode(redirectUrl);
 			var urlEncodedState = HttpUtility.UrlEncode(state);

@@ -1,6 +1,7 @@
 ﻿using System;
 using PopIdentity.Configuration;
 using PopIdentity.Providers.Facebook;
+using PopIdentity.Providers.Google;
 
 namespace PopIdentity
 {
@@ -37,11 +38,13 @@ namespace PopIdentity
 			switch (providerType)
 			{
 				case ProviderType.Facebook:
-					var generator = new FacebookLinkGenerator();
-					var link = generator.GetLink(FacebookEndpoints.OAuthLoginLink, id, redirectUrl, state);
-					return link;
+					var facebookLinkGenerator = new FacebookLoginUrlGenerator();
+					var facebookLink = facebookLinkGenerator.GetUrl(FacebookEndpoints.OAuthLoginUrl, id, redirectUrl, state);
+					return facebookLink;
 				case ProviderType.Google:
-					throw new NotImplementedException();
+					var googleLinkGenerator = new GoogleLoginUrlGenerator();
+					var googleLink = googleLinkGenerator.GetUrl(GoogleEndpoints.OAuthLoginUrl, id, redirectUrl, state);
+					return googleLink;
 				default:
 					throw new ArgumentException($"No link generator has been defined for {nameof(ProviderType)} \"{providerType}.\"");
 			}

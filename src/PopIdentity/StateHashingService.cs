@@ -8,7 +8,7 @@ namespace PopIdentity
 	public interface IStateHashingService
 	{
 		string SetCookieAndReturnHash();
-		bool VerifyHashAgainstCookie(string hash);
+		bool VerifyHashAgainstCookie();
 	}
 
 	public class StateHashingService : IStateHashingService
@@ -29,10 +29,11 @@ namespace PopIdentity
 			return hash;
 		}
 
-		public bool VerifyHashAgainstCookie(string hash)
+		public bool VerifyHashAgainstCookie()
 		{
+			var hash = _httpContextAccessor.HttpContext.Request.Query["state"];
 			var cookieValue = _httpContextAccessor.HttpContext.Request.Cookies[CookieName];
-			if (string.IsNullOrEmpty(cookieValue))
+			if (string.IsNullOrEmpty(cookieValue) || string.IsNullOrEmpty(hash))
 				return false;
 			var hashedCookieValue = GetHash(cookieValue);
 			_httpContextAccessor.HttpContext.Response.Cookies.Delete(CookieName);

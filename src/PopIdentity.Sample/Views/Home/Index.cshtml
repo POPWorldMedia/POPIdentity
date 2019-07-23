@@ -2,13 +2,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+	<div class="text-center">
+		<h1 class="display-4">Welcome</h1>
+		<form asp-action="ExternalLogin">
+			<input type="hidden" name="id" value="google" />
+			<p><input type="submit" class="btn btn-primary" value="Google" /></p>
+		</form>
 
-	<p><a href="@ViewBag.GoogleLink">login with the google</a></p>
-	
-	<form asp-action="ExternalLogin">
-		<input type="hidden" name="id" value="facebook"/>
-		<p><input type="submit" class="btn btn-primary" value="Facebook" /></p>
-	</form>
-</div>
+		<form asp-action="ExternalLogin">
+			<input type="hidden" name="id" value="facebook" />
+			<p><input type="submit" class="btn btn-primary" value="Facebook" /></p>
+		</form>
+	</div>
