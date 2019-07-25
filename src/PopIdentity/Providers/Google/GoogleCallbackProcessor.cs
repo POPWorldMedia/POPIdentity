@@ -53,7 +53,7 @@ namespace PopIdentity.Providers.Google
 				{"code", code},
 				{"client_id", clientID},
 				{"client_secret", clientSecret},
-				{"redirect_uri", "https://localhost:44353/home/callbackgoogle"},
+				{"redirect_uri", redirectUri},
 				{"grant_type", "authorization_code"}
 			};
 			var result = await client.PostAsync(GoogleEndpoints.OAuthAccessTokenUrl, new FormUrlEncodedContent(values));

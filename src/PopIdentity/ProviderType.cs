@@ -3,6 +3,7 @@
 	public enum ProviderType
 	{
 		Google,
-		Facebook
+		Facebook,
+		Microsoft
 	}
 }

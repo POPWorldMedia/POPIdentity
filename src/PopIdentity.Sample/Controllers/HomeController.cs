@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PopIdentity.Configuration;
 using PopIdentity.Providers.Facebook;
 using PopIdentity.Providers.Google;
+using PopIdentity.Providers.Microsoft;
 using PopIdentity.Sample.Models;
 
 namespace PopIdentity.Sample.Controllers
@@ -16,14 +17,16 @@ namespace PopIdentity.Sample.Controllers
 	    private readonly IFacebookCallbackProcessor _facebookCallbackProcessor;
 	    private readonly IGoogleCallbackProcessor _googleCallbackProcessor;
 	    private readonly IStateHashingService _stateHashingService;
+	    private readonly IMicrosoftCallbackProcessor _microsoftCallbackProcessor;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService, IMicrosoftCallbackProcessor microsoftCallbackProcessor)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
 		    _loginLinkFactory = loginLinkFactory;
 		    _facebookCallbackProcessor = facebookCallbackProcessor;
 		    _googleCallbackProcessor = googleCallbackProcessor;
 		    _stateHashingService = stateHashingService;
+		    _microsoftCallbackProcessor = microsoftCallbackProcessor;
 	    }
 
 	    public IActionResult Index()
@@ -47,11 +50,25 @@ namespace PopIdentity.Sample.Controllers
 					var googleRedirect = "https://localhost:44353/home/callbackgoogle";
 					var googleLink = _loginLinkFactory.GetLink(ProviderType.Google, googleRedirect, state);
 					return Redirect(googleLink);
+				case "microsoft":
+					// This URL has to specified in the Azure Portal under AD app registrations
+					var msftRedirect = "https://localhost:44353/home/callbackmicrosoft";
+					var msftLink = _loginLinkFactory.GetLink(ProviderType.Microsoft, msftRedirect, state);
+					return Redirect(msftLink);
 				default: throw new NotImplementedException($"The external login \"{id}\" is not configured.");
 		    }
+		}
+
+	    public async Task<IActionResult> CallbackMicrosoft()
+	    {
+		    var result = await _microsoftCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackmicrosoft");
+		    if (!result.IsSuccessful)
+			    return Content(result.Message);
+		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
+		    return Content(list);
 	    }
 
-        public async Task<IActionResult> CallbackFB()
+		public async Task<IActionResult> CallbackFB()
         {
 			var result = await _facebookCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackfb");
 			if (!result.IsSuccessful)

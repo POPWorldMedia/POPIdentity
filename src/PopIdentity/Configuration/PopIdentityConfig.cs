@@ -20,15 +20,15 @@ namespace PopIdentity.Configuration
 		/// Reads the configuration value at PopIdentity:Google:ClientSecret
 		/// </summary>
 		string GoogleClientSecret { get; }
-        /// <summary>
-        /// Reads the configuration value at PopIdentity:Twitter:ConsumerKey
-        /// </summary>
-        string TwitterConsumerKey { get; }
-        /// <summary>
-        /// Reads the configuration value at PopIdentity:Twitter:ConsumerSecret
-        /// </summary>
-        string TwitterConsumerSecret { get; }
-    }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Microsoft:ApplicationID
+		/// </summary>
+		string MicrosoftApplicationID { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:Microsoft:ClientSecret
+		/// </summary>
+		string MicrosoftClientSecret { get; }
+	}
 
 	public class PopIdentityConfig : IPopIdentityConfig
 	{
@@ -45,7 +45,7 @@ namespace PopIdentity.Configuration
 		public string GoogleClientID => _configuration["PopIdentity:Google:ClientID"];
 		public string GoogleClientSecret => _configuration["PopIdentity:Google:ClientSecret"];
 
-        public string TwitterConsumerKey => _configuration["PopIdentity:Twitter:ConsumerKey"];
-        public string TwitterConsumerSecret => _configuration["PopIdentity:Twitter:ConsumerSecret"];
-    }
+        public string MicrosoftApplicationID => _configuration["PopIdentity:Microsoft:ApplicationID"];
+        public string MicrosoftClientSecret => _configuration["PopIdentity:Microsoft:ClientSecret"];
+	}
 }
