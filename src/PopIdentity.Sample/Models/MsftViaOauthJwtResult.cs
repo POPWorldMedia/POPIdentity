@@ -1,6 +1,6 @@
 ﻿namespace PopIdentity.Sample.Models
 {
-	public class GitHubResult
+	public class MsftViaOauthJwtResult
 	{
 		public string ID { get; set; }
 		public string Name { get; set; }

@@ -8,16 +8,16 @@ using PopIdentity.Configuration;
 
 namespace PopIdentity.Providers.OAuth2
 {
-	public interface IOAuth2CallbackProcessor<T> where T : class
+	public interface IOAuth2JwtCallbackProcessor<T> where T : class
 	{
 		Task<CallbackResult<T>> VerifyCallback(string redirectUri, Func<IEnumerable<Claim>, T> claimMapper, string accessTokenUrl);
 	}
 
-	public class OAuth2CallbackProcessor<T> : OAuth2Base<T>, IOAuth2CallbackProcessor<T> where T : class
+	public class IoAuth2JwtJwtCallbackProcessor<T> : OAuth2Base<T>, IOAuth2JwtCallbackProcessor<T> where T : class
 	{
 		private readonly IPopIdentityConfig _popIdentityConfig;
 
-		public OAuth2CallbackProcessor(IHttpContextAccessor httpContextAccessor, IStateHashingService stateHashingService, IPopIdentityConfig popIdentityConfig) : base(httpContextAccessor, stateHashingService)
+		public IoAuth2JwtJwtCallbackProcessor(IHttpContextAccessor httpContextAccessor, IStateHashingService stateHashingService, IPopIdentityConfig popIdentityConfig) : base(httpContextAccessor, stateHashingService)
 		{
 			_popIdentityConfig = popIdentityConfig;
 		}
