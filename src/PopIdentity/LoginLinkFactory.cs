@@ -9,7 +9,7 @@ namespace PopIdentity
 	public interface ILoginLinkFactory
 	{
 		string GetLink(ProviderType providerType, string redirectUrl, string state);
-		string GetLink(ProviderType providerType, string redirectUrl, string state, string id);
+		string GetLink(ProviderType providerType, string redirectUrl, string state, string clientID);
 	}
 
 	public class LoginLinkFactory : ILoginLinkFactory
@@ -38,21 +38,21 @@ namespace PopIdentity
 			}
 		}
 
-		public string GetLink(ProviderType providerType, string redirectUrl, string state, string id)
+		public string GetLink(ProviderType providerType, string redirectUrl, string state, string clientID)
 		{
 			switch (providerType)
 			{
 				case ProviderType.Facebook:
 					var facebookLinkGenerator = new FacebookLoginUrlGenerator();
-					var facebookLink = facebookLinkGenerator.GetUrl(FacebookEndpoints.OAuthLoginUrl, id, redirectUrl, state);
+					var facebookLink = facebookLinkGenerator.GetUrl(FacebookEndpoints.OAuthLoginUrl, clientID, redirectUrl, state);
 					return facebookLink;
 				case ProviderType.Google:
 					var googleLinkGenerator = new GoogleLoginUrlGenerator();
-					var googleLink = googleLinkGenerator.GetUrl(GoogleEndpoints.OAuthLoginUrl, id, redirectUrl, state);
+					var googleLink = googleLinkGenerator.GetUrl(GoogleEndpoints.OAuthLoginUrl, clientID, redirectUrl, state);
 					return googleLink;
 				case ProviderType.Microsoft:
 					var msftGenerator = new MicrosoftLoginUrlGenerator();
-					var msftLink = msftGenerator.GetUrl(MicrosoftEndpoints.OAuthLoginUrl, id, redirectUrl, state);
+					var msftLink = msftGenerator.GetUrl(MicrosoftEndpoints.OAuthLoginUrl, clientID, redirectUrl, state);
 					return msftLink;
 				case ProviderType.OAuth2:
 					throw new ArgumentException("OAuth2 links have to be specified manually.");

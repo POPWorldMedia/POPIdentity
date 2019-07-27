@@ -64,9 +64,9 @@ namespace PopIdentity.Sample.Controllers
 					// This URL has to be specified as legal by whatever provider you're using
 					var oauthRedirect = "https://localhost:44353/home/callbackoauth";
 					var linkGenerator = new OAuth2LoginUrlGenerator();
-					// choose the claims you're looking for
-					var oauthClaims = new List<string>(new[] {"openid", "email"});
-					var oauthLink = linkGenerator.GetUrl(_popIdentityConfig.OAuth2LoginUrl, _popIdentityConfig.OAuth2ClientID, oauthRedirect, state, oauthClaims);
+					// choose the scope you're looking for
+					var scopes = new List<string>(new[] {"openid", "email"});
+					var oauthLink = linkGenerator.GetUrl(_popIdentityConfig.OAuth2LoginUrl, _popIdentityConfig.OAuth2ClientID, oauthRedirect, state, scopes);
 					return Redirect(oauthLink);
 				default: throw new NotImplementedException($"The external login \"{id}\" is not configured.");
 		    }
