@@ -3,6 +3,7 @@ using PopIdentity.Configuration;
 using PopIdentity.Providers.Facebook;
 using PopIdentity.Providers.Google;
 using PopIdentity.Providers.Microsoft;
+using PopIdentity.Providers.OAuth2;
 
 namespace PopIdentity.Extensions
 {
@@ -20,6 +21,8 @@ namespace PopIdentity.Extensions
 			serviceCollection.AddTransient<IGoogleCallbackProcessor, GoogleCallbackProcessor>();
 
 			serviceCollection.AddTransient<IMicrosoftCallbackProcessor, MicrosoftCallbackProcessor>();
+
+			serviceCollection.AddTransient(typeof(IOAuth2CallbackProcessor<>), typeof(OAuth2CallbackProcessor<>));
 
 			return serviceCollection;
 		}

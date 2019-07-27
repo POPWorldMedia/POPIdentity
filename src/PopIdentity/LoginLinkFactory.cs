@@ -31,6 +31,8 @@ namespace PopIdentity
 					return GetLink(providerType, redirectUrl, state, _popIdentityConfig.GoogleClientID);
 				case ProviderType.Microsoft:
 					return GetLink(providerType, redirectUrl, state, _popIdentityConfig.MicrosoftApplicationID);
+				case ProviderType.OAuth2:
+					throw new ArgumentException("OAuth2 links have to be specified manually.");
 				default:
 					throw new ArgumentException($"No link generator has been defined for {nameof(ProviderType)} \"{providerType}.\"");
 			}
@@ -52,6 +54,8 @@ namespace PopIdentity
 					var msftGenerator = new MicrosoftLoginUrlGenerator();
 					var msftLink = msftGenerator.GetUrl(MicrosoftEndpoints.OAuthLoginUrl, id, redirectUrl, state);
 					return msftLink;
+				case ProviderType.OAuth2:
+					throw new ArgumentException("OAuth2 links have to be specified manually.");
 				default:
 					throw new ArgumentException($"No link generator has been defined for {nameof(ProviderType)} \"{providerType}.\"");
 			}

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PopIdentity.Configuration;
 using PopIdentity.Providers.Facebook;
 using PopIdentity.Providers.Google;
 using PopIdentity.Providers.Microsoft;
+using PopIdentity.Providers.OAuth2;
 using PopIdentity.Sample.Models;
 
 namespace PopIdentity.Sample.Controllers
@@ -18,8 +21,9 @@ namespace PopIdentity.Sample.Controllers
 	    private readonly IGoogleCallbackProcessor _googleCallbackProcessor;
 	    private readonly IStateHashingService _stateHashingService;
 	    private readonly IMicrosoftCallbackProcessor _microsoftCallbackProcessor;
+	    private readonly IOAuth2CallbackProcessor<GitHubResult> _oAuth2CallbackProcessor;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService, IMicrosoftCallbackProcessor microsoftCallbackProcessor)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService, IMicrosoftCallbackProcessor microsoftCallbackProcessor, IOAuth2CallbackProcessor<GitHubResult> oAuth2CallbackProcessor)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
 		    _loginLinkFactory = loginLinkFactory;
@@ -27,6 +31,7 @@ namespace PopIdentity.Sample.Controllers
 		    _googleCallbackProcessor = googleCallbackProcessor;
 		    _stateHashingService = stateHashingService;
 		    _microsoftCallbackProcessor = microsoftCallbackProcessor;
+		    _oAuth2CallbackProcessor = oAuth2CallbackProcessor;
 	    }
 
 	    public IActionResult Index()
@@ -55,11 +60,38 @@ namespace PopIdentity.Sample.Controllers
 					var msftRedirect = "https://localhost:44353/home/callbackmicrosoft";
 					var msftLink = _loginLinkFactory.GetLink(ProviderType.Microsoft, msftRedirect, state);
 					return Redirect(msftLink);
+				case "msft":
+					var oauthRedirect = "https://localhost:44353/home/callbackoauth";
+					var linkGenerator = new OAuth2LoginUrlGenerator();
+					// choose the claims you're looking for
+					var oauthClaims = new List<string>(new[] {"openid", "email"});
+					var oauthLink = linkGenerator.GetUrl(_popIdentityConfig.OAuth2LoginUrl, _popIdentityConfig.OAuth2ClientID, oauthRedirect, state, oauthClaims);
+					return Redirect(oauthLink);
 				default: throw new NotImplementedException($"The external login \"{id}\" is not configured.");
 		    }
 		}
 
-	    public async Task<IActionResult> CallbackMicrosoft()
+	    public async Task<IActionResult> CallbackOAuth()
+	    {
+		    var result = await _oAuth2CallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackoauth",
+			    c =>
+			    {
+				    var claims = c.ToList();
+				    return new GitHubResult
+				    {
+						ID = claims.FirstOrDefault(x => x.Type == "sub")?.Value,
+					    Email = claims.FirstOrDefault(x => x.Type == "email")?.Value,
+						Name = claims.FirstOrDefault(x => x.Type == "name")?.Value
+				    };
+			    },
+			    _popIdentityConfig.OAuth2TokenUrl);
+		    if (!result.IsSuccessful)
+			    return Content(result.Message);
+		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
+		    return Content(list);
+	    }
+
+		public async Task<IActionResult> CallbackMicrosoft()
 	    {
 		    var result = await _microsoftCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackmicrosoft");
 		    if (!result.IsSuccessful)

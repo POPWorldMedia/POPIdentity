@@ -4,6 +4,7 @@
 	{
 		Google,
 		Facebook,
-		Microsoft
+		Microsoft,
+		OAuth2
 	}
 }

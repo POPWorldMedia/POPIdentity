@@ -28,6 +28,22 @@ namespace PopIdentity.Configuration
 		/// Reads the configuration value at PopIdentity:Microsoft:ClientSecret
 		/// </summary>
 		string MicrosoftClientSecret { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:OAuth2:ClientID
+		/// </summary>
+		string OAuth2ClientID { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:OAuth2:ClientSecret
+		/// </summary>
+		string OAuth2ClientSecret { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:OAuth2:LoginUrl
+		/// </summary>
+		string OAuth2LoginUrl { get; }
+		/// <summary>
+		/// Reads the configuration value at PopIdentity:OAuth2:TokenUrl
+		/// </summary>
+		string OAuth2TokenUrl { get; }
 	}
 
 	public class PopIdentityConfig : IPopIdentityConfig
@@ -47,5 +63,10 @@ namespace PopIdentity.Configuration
 
         public string MicrosoftApplicationID => _configuration["PopIdentity:Microsoft:ApplicationID"];
         public string MicrosoftClientSecret => _configuration["PopIdentity:Microsoft:ClientSecret"];
+
+        public string OAuth2ClientID => _configuration["PopIdentity:OAuth2:ClientID"];
+        public string OAuth2ClientSecret => _configuration["PopIdentity:OAuth2:ClientSecret"];
+        public string OAuth2LoginUrl => _configuration["PopIdentity:OAuth2:LoginUrl"];
+        public string OAuth2TokenUrl => _configuration["PopIdentity:OAuth2:TokenUrl"];
 	}
 }
