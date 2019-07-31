@@ -21,9 +21,9 @@ namespace PopIdentity.Sample.Controllers
 	    private readonly IGoogleCallbackProcessor _googleCallbackProcessor;
 	    private readonly IStateHashingService _stateHashingService;
 	    private readonly IMicrosoftCallbackProcessor _microsoftCallbackProcessor;
-	    private readonly IOAuth2JwtCallbackProcessor<MsftViaOauthJwtResult> _ioAuth2JwtCallbackProcessor;
+	    private readonly IOAuth2JwtCallbackProcessor _oAuth2JwtCallbackProcessor;
 
-	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService, IMicrosoftCallbackProcessor microsoftCallbackProcessor, IOAuth2JwtCallbackProcessor<MsftViaOauthJwtResult> ioAuth2JwtCallbackProcessor)
+	    public HomeController(IPopIdentityConfig popIdentityConfig, ILoginLinkFactory loginLinkFactory, IFacebookCallbackProcessor facebookCallbackProcessor, IGoogleCallbackProcessor googleCallbackProcessor, IStateHashingService stateHashingService, IMicrosoftCallbackProcessor microsoftCallbackProcessor, IOAuth2JwtCallbackProcessor oAuth2JwtCallbackProcessor)
 	    {
 		    _popIdentityConfig = popIdentityConfig;
 		    _loginLinkFactory = loginLinkFactory;
@@ -31,7 +31,7 @@ namespace PopIdentity.Sample.Controllers
 		    _googleCallbackProcessor = googleCallbackProcessor;
 		    _stateHashingService = stateHashingService;
 		    _microsoftCallbackProcessor = microsoftCallbackProcessor;
-		    _ioAuth2JwtCallbackProcessor = ioAuth2JwtCallbackProcessor;
+            _oAuth2JwtCallbackProcessor = oAuth2JwtCallbackProcessor;
 	    }
 
 	    public IActionResult Index()
@@ -74,18 +74,7 @@ namespace PopIdentity.Sample.Controllers
 
 	    public async Task<IActionResult> CallbackOAuth()
 	    {
-		    var result = await _ioAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackoauth",
-			    c =>
-			    {
-				    var claims = c.ToList();
-				    return new MsftViaOauthJwtResult
-				    {
-						ID = claims.FirstOrDefault(x => x.Type == "sub")?.Value,
-					    Email = claims.FirstOrDefault(x => x.Type == "email")?.Value,
-						Name = claims.FirstOrDefault(x => x.Type == "name")?.Value
-				    };
-			    },
-			    _popIdentityConfig.OAuth2TokenUrl);
+		    var result = await _oAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackoauth", _popIdentityConfig.OAuth2TokenUrl);
 		    if (!result.IsSuccessful)
 			    return Content(result.Message);
 		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
@@ -115,7 +104,7 @@ namespace PopIdentity.Sample.Controllers
 			var result = await _googleCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackgoogle");
 			if (!result.IsSuccessful)
 				return Content(result.Message);
-			var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\ngiven_name: {result.ResultData.GivenName}\r\nfamily_name: {result.ResultData.FamilyName}\r\npicture: {result.ResultData.Picture}";
+			var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\ngiven_name: {result.Claims.FirstOrDefault(x => x.Type == "given_name")}\r\nfamily_name: {result.Claims.FirstOrDefault(x => x.Type == "family_name")}\r\npicture: {result.Claims.FirstOrDefault(x => x.Type == "picture")}";
 			return Content(list);
         }
 

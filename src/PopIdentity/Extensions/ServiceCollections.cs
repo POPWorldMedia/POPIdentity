@@ -22,7 +22,7 @@ namespace PopIdentity.Extensions
 
 			serviceCollection.AddTransient<IMicrosoftCallbackProcessor, MicrosoftCallbackProcessor>();
 
-			serviceCollection.AddTransient(typeof(IOAuth2JwtCallbackProcessor<>), typeof(IoAuth2JwtJwtCallbackProcessor<>));
+			serviceCollection.AddTransient<IOAuth2JwtCallbackProcessor, OAuth2JwtJwtCallbackProcessor>();
 
 			return serviceCollection;
 		}

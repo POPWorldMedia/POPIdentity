@@ -10,11 +10,11 @@ namespace PopIdentity.Providers.Google
 {
 	public interface IGoogleCallbackProcessor
 	{
-		Task<CallbackResult<GoogleResult>> VerifyCallback(string redirectUri);
-		Task<CallbackResult<GoogleResult>> VerifyCallback(string redirectUri, string clientID, string clientSecret);
+		Task<CallbackResult> VerifyCallback(string redirectUri);
+		Task<CallbackResult> VerifyCallback(string redirectUri, string clientID, string clientSecret);
 	}
 
-	public class GoogleCallbackProcessor : OAuth2Base<GoogleResult>, IGoogleCallbackProcessor
+	public class GoogleCallbackProcessor : OAuth2Base, IGoogleCallbackProcessor
 	{
 		private readonly IPopIdentityConfig _popIdentityConfig;
 
@@ -25,22 +25,7 @@ namespace PopIdentity.Providers.Google
 
 		public override string AccessTokenUrl => GoogleEndpoints.OAuthAccessTokenUrl;
 
-		public override GoogleResult PopulateModel(IEnumerable<Claim> claims)
-		{
-			var list = claims.ToList();
-			var resultModel = new GoogleResult
-			{
-				ID = list.FirstOrDefault(x => x.Type == "sub")?.Value,
-				Name = list.FirstOrDefault(x => x.Type == "name")?.Value,
-				Email = list.FirstOrDefault(x => x.Type == "email")?.Value,
-				FamilyName = list.FirstOrDefault(x => x.Type == "family_name")?.Value,
-				GivenName = list.FirstOrDefault(x => x.Type == "given_name")?.Value,
-				Picture = list.FirstOrDefault(x => x.Type == "picture")?.Value
-			};
-			return resultModel;
-		}
-
-		public async Task<CallbackResult<GoogleResult>> VerifyCallback(string redirectUri)
+        public async Task<CallbackResult> VerifyCallback(string redirectUri)
 		{
 			var clientID = _popIdentityConfig.GoogleClientID;
 			var clientSecret = _popIdentityConfig.GoogleClientSecret;
