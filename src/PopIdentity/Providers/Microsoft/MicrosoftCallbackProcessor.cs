@@ -11,7 +11,7 @@ namespace PopIdentity.Providers.Microsoft
 		Task<CallbackResult> VerifyCallback(string redirectUri, string applicationID, string clientSecret);
 	}
 
-	public class MicrosoftCallbackProcessor : OAuth2Base, IMicrosoftCallbackProcessor
+	public class MicrosoftCallbackProcessor : OAuth2BaseProcessor, IMicrosoftCallbackProcessor
 	{
 		private readonly IPopIdentityConfig _popIdentityConfig;
 
@@ -26,7 +26,9 @@ namespace PopIdentity.Providers.Microsoft
 		{
 			var applicationID = _popIdentityConfig.MicrosoftApplicationID;
 			var clientSecret = _popIdentityConfig.MicrosoftClientSecret;
-			return await VerifyCallback(redirectUri, applicationID, clientSecret);
+			var result = await VerifyCallback(redirectUri, applicationID, clientSecret);
+			result.ProviderType = ProviderType.Microsoft;
+			return result;
 		}
 	}
 }

@@ -42,7 +42,7 @@ namespace PopIdentity.Providers.Facebook
 			// state check
 			var isStateCorrect = _stateHashingService.VerifyHashAgainstCookie();
 			if (!isStateCorrect)
-				return new CallbackResult {IsSuccessful = false, Message = "State did not match for Facebook."};
+				return new CallbackResult {IsSuccessful = false, Message = "State did not match for Facebook.", ProviderType = ProviderType.Facebook };
 
 			// verify OAuth code
 			var code = _httpContextAccessor.HttpContext.Request.Query["code"];
@@ -50,7 +50,7 @@ namespace PopIdentity.Providers.Facebook
 			var client = new HttpClient();
 			var result = await client.GetAsync($"{FacebookEndpoints.OAuthAccessTokenBaseUrl}?client_id={appID}&redirect_uri={urlEncodedRedirect}&client_secret={appSecret}&code={code}");
 			if (!result.IsSuccessStatusCode)
-				return new CallbackResult {IsSuccessful = false, Message = $"Facebook OAuth failed: {result.StatusCode}"};
+				return new CallbackResult {IsSuccessful = false, Message = $"Facebook OAuth failed: {result.StatusCode}", ProviderType = ProviderType.Facebook };
 
 			// get the profile info
 			var text = await result.Content.ReadAsStringAsync();
@@ -60,7 +60,7 @@ namespace PopIdentity.Providers.Facebook
 			{
 				var errorText = await userInfoResponse.Content.ReadAsStringAsync();
 				var errorMessage = JObject.Parse(errorText).SelectToken("error.message");
-				return new CallbackResult { IsSuccessful = false, Message = $"Facebook profile retrieval failed: {result.StatusCode}, {errorMessage}" };
+				return new CallbackResult { IsSuccessful = false, Message = $"Facebook profile retrieval failed: {result.StatusCode}, {errorMessage}", ProviderType = ProviderType.Facebook };
 			}
 
 			// parse the profile result
@@ -72,7 +72,7 @@ namespace PopIdentity.Providers.Facebook
 				Email = properties.FirstOrDefault(x => x.Path == "email")?.Value,
 				Name = properties.FirstOrDefault(x => x.Path == "name")?.Value
 			};
-			return new CallbackResult {IsSuccessful = true, Message = string.Empty, ResultData = facebookResult, Claims = new Claim[]{}};
+			return new CallbackResult {IsSuccessful = true, Message = string.Empty, ResultData = facebookResult, Claims = new Claim[]{}, ProviderType = ProviderType.Facebook};
 		}
 	}
 }

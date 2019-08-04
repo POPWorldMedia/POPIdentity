@@ -9,7 +9,7 @@ namespace PopIdentity.Providers.OAuth2
 		Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl);
 	}
 
-	public class OAuth2JwtJwtCallbackProcessor : OAuth2Base, IOAuth2JwtCallbackProcessor
+	public class OAuth2JwtJwtCallbackProcessor : OAuth2BaseProcessor, IOAuth2JwtCallbackProcessor
 	{
 		private readonly IPopIdentityConfig _popIdentityConfig;
 

@@ -9,5 +9,6 @@ namespace PopIdentity
 		public bool IsSuccessful { get; set; }
 		public string Message { get; set; }
         public IEnumerable<Claim> Claims { get; set; }
+		public ProviderType ProviderType { get; set; }
 	}
 }

@@ -9,12 +9,12 @@ using Newtonsoft.Json.Linq;
 
 namespace PopIdentity.Providers.OAuth2
 {
-	public abstract class OAuth2Base
+	public abstract class OAuth2BaseProcessor
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IStateHashingService _stateHashingService;
 
-		protected OAuth2Base(IHttpContextAccessor httpContextAccessor, IStateHashingService stateHashingService)
+		protected OAuth2BaseProcessor(IHttpContextAccessor httpContextAccessor, IStateHashingService stateHashingService)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_stateHashingService = stateHashingService;
@@ -27,7 +27,7 @@ namespace PopIdentity.Providers.OAuth2
 			// state check
 			var isStateCorrect = _stateHashingService.VerifyHashAgainstCookie();
 			if (!isStateCorrect)
-				return new CallbackResult { IsSuccessful = false, Message = "State did not match for OAuth2." };
+				return new CallbackResult { IsSuccessful = false, Message = "State did not match for OAuth2.", ProviderType = ProviderType.OAuth2 };
 
 			// get JWT
 			var code = _httpContextAccessor.HttpContext.Request.Query["code"];
@@ -42,7 +42,7 @@ namespace PopIdentity.Providers.OAuth2
 			};
 			var result = await client.PostAsync(AccessTokenUrl, new FormUrlEncodedContent(values));
 			if (!result.IsSuccessStatusCode)
-				return new CallbackResult { IsSuccessful = false, Message = $"OAuth2 failed: {result.StatusCode}" };
+				return new CallbackResult { IsSuccessful = false, Message = $"OAuth2 failed: {result.StatusCode}", ProviderType = ProviderType.OAuth2 };
 
 			// parse results
 			var text = await result.Content.ReadAsStringAsync();
@@ -57,7 +57,7 @@ namespace PopIdentity.Providers.OAuth2
                 Name = token.Claims.FirstOrDefault(x => x.Type == "name")?.Value,
                 Email = token.Claims.FirstOrDefault(x => x.Type == "email")?.Value
             };
-			return new CallbackResult { IsSuccessful = true, ResultData = resultModel, Claims = token.Claims };
+			return new CallbackResult { IsSuccessful = true, ResultData = resultModel, Claims = token.Claims, ProviderType = ProviderType.OAuth2 };
 		}
 	}
 }

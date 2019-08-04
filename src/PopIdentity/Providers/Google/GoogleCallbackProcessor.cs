@@ -14,7 +14,7 @@ namespace PopIdentity.Providers.Google
 		Task<CallbackResult> VerifyCallback(string redirectUri, string clientID, string clientSecret);
 	}
 
-	public class GoogleCallbackProcessor : OAuth2Base, IGoogleCallbackProcessor
+	public class GoogleCallbackProcessor : OAuth2BaseProcessor, IGoogleCallbackProcessor
 	{
 		private readonly IPopIdentityConfig _popIdentityConfig;
 
@@ -29,7 +29,9 @@ namespace PopIdentity.Providers.Google
 		{
 			var clientID = _popIdentityConfig.GoogleClientID;
 			var clientSecret = _popIdentityConfig.GoogleClientSecret;
-			return await VerifyCallback(redirectUri, clientID, clientSecret);
+			var result = await VerifyCallback(redirectUri, clientID, clientSecret);
+			result.ProviderType = ProviderType.Google;
+			return result;
 		}
 	}
 }
