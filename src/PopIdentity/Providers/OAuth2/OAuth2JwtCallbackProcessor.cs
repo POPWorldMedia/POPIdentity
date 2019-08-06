@@ -7,6 +7,7 @@ namespace PopIdentity.Providers.OAuth2
 	public interface IOAuth2JwtCallbackProcessor
 	{
 		Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl);
+		Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl, string applicationID, string clientSecret);
 	}
 
 	public class OAuth2JwtJwtCallbackProcessor : OAuth2BaseProcessor, IOAuth2JwtCallbackProcessor
@@ -29,5 +30,11 @@ namespace PopIdentity.Providers.OAuth2
 			var clientSecret = _popIdentityConfig.OAuth2ClientSecret;
 			return await VerifyCallback(redirectUri, applicationID, clientSecret);
 		}
-    }
+
+		public async Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl, string applicationID, string clientSecret)
+		{
+			_accessTokenUrl = accessTokenUrl;
+			return await VerifyCallback(redirectUri, applicationID, clientSecret);
+		}
+	}
 }
