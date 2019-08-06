@@ -31,7 +31,6 @@ namespace PopIdentity.Providers.OAuth2
 
 			// get JWT
 			var code = _httpContextAccessor.HttpContext.Request.Query["code"];
-			var client = new HttpClient();
 			var values = new Dictionary<string, string>
 			{
 				{"code", code},
@@ -40,7 +39,18 @@ namespace PopIdentity.Providers.OAuth2
 				{"redirect_uri", redirectUri},
 				{"grant_type", "authorization_code"}
 			};
-			var result = await client.PostAsync(AccessTokenUrl, new FormUrlEncodedContent(values));
+			HttpResponseMessage result;
+			using (var client = new HttpClient())
+			{
+				try
+				{
+					result = await client.PostAsync(AccessTokenUrl, new FormUrlEncodedContent(values));
+				}
+				catch (HttpRequestException exception)
+				{
+					return new CallbackResult { IsSuccessful = false, Message = $"Callback for token failed: {exception.Message}", ProviderType = ProviderType.OAuth2 };
+				}
+			}
 			if (!result.IsSuccessStatusCode)
 				return new CallbackResult { IsSuccessful = false, Message = $"OAuth2 failed: {result.StatusCode}", ProviderType = ProviderType.OAuth2 };
 

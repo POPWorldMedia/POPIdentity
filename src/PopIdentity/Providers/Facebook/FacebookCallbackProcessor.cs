@@ -37,8 +37,6 @@ namespace PopIdentity.Providers.Facebook
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri, string appID, string appSecret)
 		{
-			// https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-
 			// state check
 			var isStateCorrect = _stateHashingService.VerifyHashAgainstCookie();
 			if (!isStateCorrect)
@@ -47,24 +45,32 @@ namespace PopIdentity.Providers.Facebook
 			// verify OAuth code
 			var code = _httpContextAccessor.HttpContext.Request.Query["code"];
 			var urlEncodedRedirect = HttpUtility.UrlEncode(redirectUri);
-			var client = new HttpClient();
-			var result = await client.GetAsync($"{FacebookEndpoints.OAuthAccessTokenBaseUrl}?client_id={appID}&redirect_uri={urlEncodedRedirect}&client_secret={appSecret}&code={code}");
-			if (!result.IsSuccessStatusCode)
-				return new CallbackResult {IsSuccessful = false, Message = $"Facebook OAuth failed: {result.StatusCode}", ProviderType = ProviderType.Facebook };
-
-			// get the profile info
-			var text = await result.Content.ReadAsStringAsync();
-			var idToken = JObject.Parse(text).Root.SelectToken("access_token").ToString();
-			var userInfoResponse = await client.GetAsync($"{FacebookEndpoints.ProfileBaseUrl}?access_token={idToken}&fields=id,name,email");
-			if (!userInfoResponse.IsSuccessStatusCode)
+			string userInfoText = string.Empty;
+			using (var client = new HttpClient())
 			{
-				var errorText = await userInfoResponse.Content.ReadAsStringAsync();
-				var errorMessage = JObject.Parse(errorText).SelectToken("error.message");
-				return new CallbackResult { IsSuccessful = false, Message = $"Facebook profile retrieval failed: {result.StatusCode}, {errorMessage}", ProviderType = ProviderType.Facebook };
+				try
+				{
+					var result = await client.GetAsync($"{FacebookEndpoints.OAuthAccessTokenBaseUrl}?client_id={appID}&redirect_uri={urlEncodedRedirect}&client_secret={appSecret}&code={code}");
+					if (!result.IsSuccessStatusCode)
+						return new CallbackResult {IsSuccessful = false, Message = $"Facebook OAuth failed: {result.StatusCode}", ProviderType = ProviderType.Facebook};
+					// get the profile info
+					var text = await result.Content.ReadAsStringAsync();
+					var idToken = JObject.Parse(text).Root.SelectToken("access_token").ToString();
+					var userInfoResponse = await client.GetAsync($"{FacebookEndpoints.ProfileBaseUrl}?access_token={idToken}&fields=id,name,email");
+					if (!userInfoResponse.IsSuccessStatusCode)
+					{
+						var errorText = await userInfoResponse.Content.ReadAsStringAsync();
+						var errorMessage = JObject.Parse(errorText).SelectToken("error.message");
+						return new CallbackResult { IsSuccessful = false, Message = $"Facebook profile retrieval failed: {result.StatusCode}, {errorMessage}", ProviderType = ProviderType.Facebook };
+					}
+					// parse the profile result
+					userInfoText = await userInfoResponse.Content.ReadAsStringAsync();
+				}
+				catch (HttpRequestException exception)
+				{
+					return new CallbackResult { IsSuccessful = false, Message = $"Callback for Facebook data failed: {exception.Message}", ProviderType = ProviderType.Facebook };
+				}
 			}
-
-			// parse the profile result
-			var userInfoText = await userInfoResponse.Content.ReadAsStringAsync();
 			var properties = JObject.Parse(userInfoText).Values().Select(x => new { x.Path, Value = x.Value<string>() }).ToList();
 			var facebookResult = new ResultData
 			{
