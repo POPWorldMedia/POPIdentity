@@ -22,6 +22,7 @@ namespace PopIdentity.Providers.OAuth2
 		private string _accessTokenUrl;
 
 		public override string AccessTokenUrl => _accessTokenUrl;
+		public override ProviderType ProviderType => ProviderType.OAuth2;
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl)
 		{

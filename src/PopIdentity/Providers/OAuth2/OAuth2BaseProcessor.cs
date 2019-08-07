@@ -21,6 +21,7 @@ namespace PopIdentity.Providers.OAuth2
 		}
 
 		public abstract string AccessTokenUrl { get; }
+		public abstract ProviderType ProviderType { get; }
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri, string clientID, string clientSecret)
 		{
@@ -67,7 +68,7 @@ namespace PopIdentity.Providers.OAuth2
                 Name = token.Claims.FirstOrDefault(x => x.Type == "name")?.Value,
                 Email = token.Claims.FirstOrDefault(x => x.Type == "email")?.Value
             };
-			return new CallbackResult { IsSuccessful = true, ResultData = resultModel, Claims = token.Claims, ProviderType = ProviderType.OAuth2 };
+			return new CallbackResult { IsSuccessful = true, ResultData = resultModel, Claims = token.Claims, ProviderType = ProviderType };
 		}
 	}
 }

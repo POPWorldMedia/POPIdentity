@@ -21,8 +21,9 @@ namespace PopIdentity.Providers.Google
 		}
 
 		public override string AccessTokenUrl => GoogleEndpoints.OAuthAccessTokenUrl;
+		public override ProviderType ProviderType => ProviderType.Google;
 
-        public async Task<CallbackResult> VerifyCallback(string redirectUri)
+		public async Task<CallbackResult> VerifyCallback(string redirectUri)
 		{
 			var clientID = _popIdentityConfig.GoogleClientID;
 			var clientSecret = _popIdentityConfig.GoogleClientSecret;
