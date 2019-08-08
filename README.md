@@ -15,6 +15,8 @@ This is for people who think that the existing ASP.NET Core external login syste
 ## Getting started
 The sample web app in the source is the easiest way to see how this works. The `HomeController` has enough comments to see how best to use the framework. The goal is to be able to craft a login experience from scratch at request time, or leverage the configuration values.
 
+POP Forums uses this library today. To learn more about that implementation, go here: https://github.com/POPWorldMedia/POPForums/wiki/External-login-configuration
+
 ## Getting the bits
 [![Build status](https://popw.visualstudio.com/POP%20Identity/_apis/build/status/POP%20Identity-ASP.NET%20Core-CI)](https://popw.visualstudio.com/POP%20Identity/_build/latest?definitionId=3)
 
