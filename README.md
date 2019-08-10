@@ -3,7 +3,7 @@
 POP Identity is a lightweight, low-opinion, mini-library for social and third-party logins in ASP.NET Core.
 
 ## Project status
-This is super alpha. Hopeful roadmap is to support round-tripping to Google, Facebook, Microsoft and generic OAuth2, resulting in user data that you can persist as you wish. Twitter uses old OAuth, which is too much of a pain to support.
+v1 has shipped and is available via Nuget. Running against netstandard2.0, it has support for round-tripping to Google, Facebook, Microsoft and any generic OAuth2 service that returns a JWT.
 
 ## Who is this for?
 This is for people who think that the existing ASP.NET Core external login system is too much magic, or too tightly coupled to Identity and/or EntityFramework. It didn't evolve much from the old OWIN days. It has the following goals:
