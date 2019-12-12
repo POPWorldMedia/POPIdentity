@@ -18,7 +18,11 @@ The sample web app in the source is the easiest way to see how this works. The `
 POP Forums uses this library today. To learn more about that implementation, go here: https://github.com/POPWorldMedia/POPForums/wiki/External-login-configuration
 
 ## Getting the bits
-[![Build status](https://popw.visualstudio.com/POP%20Identity/_apis/build/status/POP%20Identity-ASP.NET%20Core-CI)](https://popw.visualstudio.com/POP%20Identity/_build/latest?definitionId=3)
+POP Identity is available as a Nuget package: 
 
-Get the latest build from the MyGet feed:
-https://www.myget.org/F/popidentity/api/v3/index.json
+https://www.nuget.org/packages/PopIdentity/ 
+
+## CI build 
+https://www.myget.org/F/popidentity/api/v3/index.json 
+
+[![Build status](https://popw.visualstudio.com/POP%20Identity/_apis/build/status/POP%20Identity-ASP.NET%20Core-CI)](https://popw.visualstudio.com/POP%20Identity/_build/latest?definitionId=3)
