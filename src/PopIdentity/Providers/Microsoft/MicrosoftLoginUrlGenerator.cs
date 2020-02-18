@@ -8,7 +8,7 @@ namespace PopIdentity.Providers.Microsoft
 		{
 			var urlEncodedRedirect = HttpUtility.UrlEncode(redirectUrl);
 			var urlEncodedState = HttpUtility.UrlEncode(state);
-			var link = $"{baseUrl}?client_id={clientID}&redirect_uri={urlEncodedRedirect}&state={urlEncodedState}&response_type=code&scope=openid+email";
+			var link = $"{baseUrl}?client_id={clientID}&redirect_uri={urlEncodedRedirect}&state={urlEncodedState}&response_type=code&scope=openid+email+profile";
 			return link;
 		}
 	}
