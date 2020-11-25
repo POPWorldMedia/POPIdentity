@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
 using PopIdentity.Configuration;
 
 namespace PopIdentity.Providers.Facebook
@@ -55,12 +54,12 @@ namespace PopIdentity.Providers.Facebook
 						return new CallbackResult {IsSuccessful = false, Message = $"Facebook OAuth failed: {result.StatusCode}", ProviderType = ProviderType.Facebook};
 					// get the profile info
 					var text = await result.Content.ReadAsStringAsync();
-					var idToken = JObject.Parse(text).Root.SelectToken("access_token").ToString();
+					var idToken = JsonDocument.Parse(text).RootElement.GetProperty("access_token").ToString();
 					var userInfoResponse = await client.GetAsync($"{FacebookEndpoints.ProfileBaseUrl}?access_token={idToken}&fields=id,name,email");
 					if (!userInfoResponse.IsSuccessStatusCode)
 					{
 						var errorText = await userInfoResponse.Content.ReadAsStringAsync();
-						var errorMessage = JObject.Parse(errorText).SelectToken("error.message");
+						var errorMessage = JsonDocument.Parse(errorText).RootElement.GetProperty("error.message");
 						return new CallbackResult { IsSuccessful = false, Message = $"Facebook profile retrieval failed: {result.StatusCode}, {errorMessage}", ProviderType = ProviderType.Facebook };
 					}
 					// parse the profile result
@@ -71,12 +70,13 @@ namespace PopIdentity.Providers.Facebook
 					return new CallbackResult { IsSuccessful = false, Message = $"Callback for Facebook data failed: {exception.Message}", ProviderType = ProviderType.Facebook };
 				}
 			}
-			var properties = JObject.Parse(userInfoText).Values().Select(x => new { x.Path, Value = x.Value<string>() }).ToList();
+
+			var properties = JsonDocument.Parse(userInfoText).RootElement;//..EnumerateArray().ToList().Select(x => new { Path = x.GetProperty(), Value = x.Value<string>() }).ToList();
 			var facebookResult = new ResultData
 			{
-				ID = properties.FirstOrDefault(x => x.Path == "id")?.Value,
-				Email = properties.FirstOrDefault(x => x.Path == "email")?.Value,
-				Name = properties.FirstOrDefault(x => x.Path == "name")?.Value
+				ID = properties.GetProperty("id").ToString(),
+				Email = properties.GetProperty("email").ToString(),
+				Name = properties.GetProperty("name").ToString()
 			};
 			return new CallbackResult {IsSuccessful = true, Message = string.Empty, ResultData = facebookResult, Claims = new Claim[]{}, ProviderType = ProviderType.Facebook};
 		}

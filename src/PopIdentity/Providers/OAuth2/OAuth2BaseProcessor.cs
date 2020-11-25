@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
 
 namespace PopIdentity.Providers.OAuth2
 {
@@ -57,9 +57,9 @@ namespace PopIdentity.Providers.OAuth2
 
 			// parse results
 			var text = await result.Content.ReadAsStringAsync();
-			var idToken = JObject.Parse(text).Root.SelectToken("id_token").ToString();
+			JsonDocument.Parse(text).RootElement.TryGetProperty("id_token", out var idToken);
 			var handler = new JwtSecurityTokenHandler();
-			var token = handler.ReadJwtToken(idToken);
+			var token = handler.ReadJwtToken(idToken.GetString());
 			if (token.Claims == null)
 				throw new Exception("OAuth token has no claims");
             var resultModel = new ResultData
