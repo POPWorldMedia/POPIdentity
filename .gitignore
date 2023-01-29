@@ -2,3 +2,5 @@
 obj
 bin
 appsettings.Development.json
+.idea
+.DS_Store

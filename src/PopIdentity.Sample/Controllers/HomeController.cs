@@ -47,22 +47,22 @@ namespace PopIdentity.Sample.Controllers
 		    {
 				case "facebook":
 					// This URL has to be specified in the Facebook developer console under "Valid OAuth Redirect URIs."
-					var facebookRedirect = "https://localhost:44353/home/callbackfb";
+					var facebookRedirect = "https://localhost:5001/home/callbackfb";
 					var facebookLink = _loginLinkFactory.GetLink(ProviderType.Facebook, facebookRedirect, state);
 					return Redirect(facebookLink);
 				case "google":
 					// This URL has to specified in the Google Cloud console under Credentials -> OAuth 2.0 client ID's
-					var googleRedirect = "https://localhost:44353/home/callbackgoogle";
+					var googleRedirect = "https://localhost:5001/home/callbackgoogle";
 					var googleLink = _loginLinkFactory.GetLink(ProviderType.Google, googleRedirect, state);
 					return Redirect(googleLink);
 				case "microsoft":
 					// This URL has to specified in the Azure Portal under AD app registrations
-					var msftRedirect = "https://localhost:44353/home/callbackmicrosoft";
+					var msftRedirect = "https://localhost:5001/home/callbackmicrosoft";
 					var msftLink = _loginLinkFactory.GetLink(ProviderType.Microsoft, msftRedirect, state);
 					return Redirect(msftLink);
 				case "msft":
 					// This URL has to be specified as legal by whatever provider you're using
-					var oauthRedirect = "https://localhost:44353/home/callbackoauth";
+					var oauthRedirect = "https://localhost:5001/home/callbackoauth";
 					var linkGenerator = new OAuth2LoginUrlGenerator();
 					// choose the scope you're looking for
 					var scopes = new List<string>(new[] {"openid", "email"});
@@ -74,7 +74,7 @@ namespace PopIdentity.Sample.Controllers
 
 	    public async Task<IActionResult> CallbackOAuth()
 	    {
-		    var result = await _oAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackoauth", _popIdentityConfig.OAuth2TokenUrl);
+		    var result = await _oAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackoauth", _popIdentityConfig.OAuth2TokenUrl);
 		    if (!result.IsSuccessful)
 			    return Content(result.Message);
 		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
@@ -83,7 +83,7 @@ namespace PopIdentity.Sample.Controllers
 
 		public async Task<IActionResult> CallbackMicrosoft()
 	    {
-		    var result = await _microsoftCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackmicrosoft");
+		    var result = await _microsoftCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackmicrosoft");
 		    if (!result.IsSuccessful)
 			    return Content(result.Message);
 		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
@@ -92,7 +92,7 @@ namespace PopIdentity.Sample.Controllers
 
 		public async Task<IActionResult> CallbackFB()
         {
-			var result = await _facebookCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackfb");
+			var result = await _facebookCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackfb");
 			if (!result.IsSuccessful)
 				return Content(result.Message);
 			var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
@@ -101,7 +101,7 @@ namespace PopIdentity.Sample.Controllers
 
 		public async Task<IActionResult> CallbackGoogle()
 		{
-			var result = await _googleCallbackProcessor.VerifyCallback("https://localhost:44353/home/callbackgoogle");
+			var result = await _googleCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackgoogle");
 			if (!result.IsSuccessful)
 				return Content(result.Message);
 			var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\ngiven_name: {result.Claims.FirstOrDefault(x => x.Type == "given_name")}\r\nfamily_name: {result.Claims.FirstOrDefault(x => x.Type == "family_name")}\r\npicture: {result.Claims.FirstOrDefault(x => x.Type == "picture")}";
