@@ -1,14 +1,14 @@
 # POP Identity
 
-POP Identity is a lightweight, low-opinion, mini-library for social and third-party logins in ASP.NET Core.
+POP Identity is a lightweight, low-opinion, mini-library for social and third-party OAuth logins in ASP.NET Core. It allows for request-time configuration instead of global, startup time configuration.
 
 ## Project status
-v3 has shipped and is available via Nuget. Running against net5.0, it has support for round-tripping to Google, Facebook, Microsoft and any generic OAuth2 service that returns a JWT.
+v4 has shipped and is available via Nuget. Running against netstandard2.1, it has support for round-tripping to Google, Facebook, Microsoft and any generic OAuth2 service that returns a JWT. This version contains package updates, and a simplified sample project.
 
 ## Who is this for?
 This is for people who think that the existing ASP.NET Core external login system is too much magic, or too tightly coupled to Identity and/or EntityFramework. It didn't evolve much from the old OWIN days. It has the following goals:
 * Be super light-weight, handing off just enough mundane detail to the library.
-* Allow code to change client ID's, secrets and other parameters at request time, as opposed to the built-in framework that sets this all at startup. This makes it appropriate for multi-tenant situations.
+* Allow code to change client ID's, secrets and other parameters _at request time_ instead of during _startup_ (which is what the framework bits do). This makes it appropriate for multi-tenant situations.
 * Allow the developer to persist the resulting data (external ID's, name, email, etc.) in whatever manner makes sense. This library has no persistence.
 * Defer authorization logic to the developer. It doesn't setup any claims identity... that's up to you.
 
