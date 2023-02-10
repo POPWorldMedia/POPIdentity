@@ -12,6 +12,7 @@ namespace PopIdentity.Extensions
 		public static IServiceCollection AddPopIdentity(this IServiceCollection serviceCollection)
 		{
 			serviceCollection.AddTransient<ILoginLinkFactory, LoginLinkFactory>();
+			serviceCollection.AddTransient<IOAuth2LoginUrlGenerator, OAuth2LoginUrlGenerator>();
 			serviceCollection.AddTransient<IStateHashingService, StateHashingService>();
 
 			serviceCollection.AddTransient<IPopIdentityConfig, PopIdentityConfig>();
