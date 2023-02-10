@@ -5,6 +5,7 @@
 		Google,
 		Facebook,
 		Microsoft,
-		OAuth2
+		OAuth2,
+		OAuthOnly
 	}
 }
