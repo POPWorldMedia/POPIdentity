@@ -3,7 +3,13 @@ using System.Web;
 
 namespace PopIdentity.Providers.OAuth2
 {
-	public class OAuth2LoginUrlGenerator
+	public interface IOAuth2LoginUrlGenerator
+	{
+		string GetUrl(string baseUrl, string clientID, string redirectUrl, string state, IEnumerable<string> scopes);
+		string GetUrl(string baseUrl, string clientID, string redirectUrl, string state, string scopes);
+	}
+
+	public class OAuth2LoginUrlGenerator : IOAuth2LoginUrlGenerator
 	{
 		public string GetUrl(string baseUrl, string clientID, string redirectUrl, string state, IEnumerable<string> scopes)
 		{
