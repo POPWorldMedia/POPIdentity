@@ -8,6 +8,8 @@ namespace PopIdentity.Providers.OAuth2
 	{
 		Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl);
 		Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl, string applicationID, string clientSecret);
+		Task<CallbackResult> GetRefreshToken(string refreshToken, string accessTokenUrl);
+		Task<CallbackResult> GetRefreshToken(string refreshToken, string accessTokenUrl, string applicationID, string clientSecret);
 	}
 
 	public class OAuth2JwtJwtCallbackProcessor : OAuth2BaseProcessor, IOAuth2JwtCallbackProcessor
@@ -21,8 +23,8 @@ namespace PopIdentity.Providers.OAuth2
 
 		private string _accessTokenUrl;
 
-		public override string AccessTokenUrl => _accessTokenUrl;
-		public override ProviderType ProviderType => ProviderType.OAuth2;
+		protected override string AccessTokenUrl => _accessTokenUrl;
+		protected override ProviderType ProviderType => ProviderType.OAuth2;
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri, string accessTokenUrl)
 		{
@@ -36,6 +38,20 @@ namespace PopIdentity.Providers.OAuth2
 		{
 			_accessTokenUrl = accessTokenUrl;
 			return await VerifyCallback(redirectUri, applicationID, clientSecret);
+		}
+
+		public async Task<CallbackResult> GetRefreshToken(string refreshToken, string accessTokenUrl)
+		{
+			_accessTokenUrl = accessTokenUrl;
+			var applicationID = _popIdentityConfig.OAuth2ClientID;
+			var clientSecret = _popIdentityConfig.OAuth2ClientSecret;
+			return await GetRefreshToken(refreshToken, applicationID, clientSecret);
+		}
+
+		public async Task<CallbackResult> GetRefreshToken(string refreshToken, string accessTokenUrl, string applicationID, string clientSecret)
+		{
+			_accessTokenUrl = accessTokenUrl;
+			return await GetRefreshToken(refreshToken, applicationID, clientSecret);
 		}
 	}
 }

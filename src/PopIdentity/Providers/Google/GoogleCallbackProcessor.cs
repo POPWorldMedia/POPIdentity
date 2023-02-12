@@ -20,8 +20,8 @@ namespace PopIdentity.Providers.Google
 			_popIdentityConfig = popIdentityConfig;
 		}
 
-		public override string AccessTokenUrl => GoogleEndpoints.OAuthAccessTokenUrl;
-		public override ProviderType ProviderType => ProviderType.Google;
+		protected override string AccessTokenUrl => GoogleEndpoints.OAuthAccessTokenUrl;
+		protected override ProviderType ProviderType => ProviderType.Google;
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri)
 		{

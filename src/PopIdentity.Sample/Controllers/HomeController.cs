@@ -65,7 +65,7 @@ namespace PopIdentity.Sample.Controllers
 					var oauthRedirect = "https://localhost:5001/home/callbackoauth";
 					var linkGenerator = new OAuth2LoginUrlGenerator();
 					// choose the scope you're looking for
-					var scopes = new List<string>(new[] {"openid", "email"});
+					var scopes = new List<string>(new[] {"openid", "email", "profile", "offline_access"});
 					var oauthLink = linkGenerator.GetUrl(_popIdentityConfig.OAuth2LoginUrl, _popIdentityConfig.OAuth2ClientID, oauthRedirect, state, scopes);
 					return Redirect(oauthLink);
 				default: throw new NotImplementedException($"The external login \"{id}\" is not configured.");
@@ -77,7 +77,9 @@ namespace PopIdentity.Sample.Controllers
 		    var result = await _oAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackoauth", _popIdentityConfig.OAuth2TokenUrl);
 		    if (!result.IsSuccessful)
 			    return Content(result.Message);
-		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}";
+		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\nrefresh token: {result.RefreshToken}";
+		    var refreshAttempt = await _oAuth2JwtCallbackProcessor.GetRefreshToken(result.RefreshToken, _popIdentityConfig.OAuth2TokenUrl);
+		    list += "\r\n\r\nnew refresh: " + refreshAttempt.RefreshToken;
 		    return Content(list);
 	    }
 

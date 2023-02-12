@@ -20,8 +20,8 @@ namespace PopIdentity.Providers.Microsoft
 			_popIdentityConfig = popIdentityConfig;
 		}
 
-		public override string AccessTokenUrl => MicrosoftEndpoints.OAuthAccessTokenUrl;
-		public override ProviderType ProviderType => ProviderType.Microsoft;
+		protected override string AccessTokenUrl => MicrosoftEndpoints.OAuthAccessTokenUrl;
+		protected override ProviderType ProviderType => ProviderType.Microsoft;
 
 		public async Task<CallbackResult> VerifyCallback(string redirectUri)
 		{

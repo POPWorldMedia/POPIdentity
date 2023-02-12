@@ -10,7 +10,7 @@
 	  <RepositoryUrl>https://github.com/POPWorldMedia/POPIdentity</RepositoryUrl>
 	  <Copyright>2023, POP World Media, LLC</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <Version>4.1.1</Version>
+	  <Version>4.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

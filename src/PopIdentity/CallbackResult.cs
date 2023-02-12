@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace PopIdentity
@@ -10,5 +11,7 @@ namespace PopIdentity
 		public string Message { get; set; }
         public IEnumerable<Claim> Claims { get; set; }
 		public ProviderType ProviderType { get; set; }
+		public JwtSecurityToken Token { get; set; }
+		public string RefreshToken { get; set; }
 	}
 }
