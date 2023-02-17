@@ -91,6 +91,7 @@ namespace PopIdentity.Providers.OAuth2
 			var text = await result.Content.ReadAsStringAsync();
 			JsonDocument.Parse(text).RootElement.TryGetProperty("id_token", out var idToken);
 			JsonDocument.Parse(text).RootElement.TryGetProperty("refresh_token", out var refreshToken);
+			JsonDocument.Parse(text).RootElement.TryGetProperty("access_token", out var accessToken);
 			var handler = new JwtSecurityTokenHandler();
 			var token = handler.ReadJwtToken(idToken.GetString());
 			if (token.Claims == null)
@@ -104,7 +105,7 @@ namespace PopIdentity.Providers.OAuth2
 			return new CallbackResult
 			{
 				IsSuccessful = true, ResultData = resultModel, Claims = token.Claims, ProviderType = ProviderType,
-				Token = token, RefreshToken = refreshToken.GetString()
+				Token = token, RefreshToken = refreshToken.GetString(), AccessToken = accessToken.GetString()
 			};
 		}
 	}

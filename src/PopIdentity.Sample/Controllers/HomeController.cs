@@ -77,9 +77,7 @@ namespace PopIdentity.Sample.Controllers
 		    var result = await _oAuth2JwtCallbackProcessor.VerifyCallback("https://localhost:5001/home/callbackoauth", _popIdentityConfig.OAuth2TokenUrl);
 		    if (!result.IsSuccessful)
 			    return Content(result.Message);
-		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\nrefresh token: {result.RefreshToken}";
-		    var refreshAttempt = await _oAuth2JwtCallbackProcessor.GetRefreshToken(result.RefreshToken, _popIdentityConfig.OAuth2TokenUrl);
-		    list += "\r\n\r\nnew refresh: " + refreshAttempt.RefreshToken;
+		    var list = $"id: {result.ResultData.ID}\r\nname: {result.ResultData.Name}\r\nemail: {result.ResultData.Email}\r\nrefresh token: {result.RefreshToken}\r\n\r\naccess token: {result.AccessToken}";
 		    return Content(list);
 	    }
 
