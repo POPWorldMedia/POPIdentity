@@ -88,10 +88,23 @@ namespace PopIdentity.Providers.OAuth2
 				};
 
 			// parse results
-			var text = await result.Content.ReadAsStringAsync();
-			JsonDocument.Parse(text).RootElement.TryGetProperty("id_token", out var idToken);
-			JsonDocument.Parse(text).RootElement.TryGetProperty("refresh_token", out var refreshToken);
-			JsonDocument.Parse(text).RootElement.TryGetProperty("access_token", out var accessToken);
+			string text = await result.Content.ReadAsStringAsync();
+			JsonDocument jsDoc;
+			try
+			{
+				jsDoc = JsonDocument.Parse(text);
+			}
+			catch (Exception e)
+			{
+				return new CallbackResult
+				{
+					IsSuccessful = false, Message = $"Could not parse JSON response: {e.Message}", ProviderType = ProviderType.OAuth2
+				};
+			}
+
+			jsDoc.RootElement.TryGetProperty("id_token", out var idToken);
+			jsDoc.RootElement.TryGetProperty("refresh_token", out var refreshToken);
+			jsDoc.RootElement.TryGetProperty("access_token", out var accessToken);
 			var handler = new JwtSecurityTokenHandler();
 			var token = handler.ReadJwtToken(idToken.GetString());
 			if (token.Claims == null)
@@ -102,10 +115,12 @@ namespace PopIdentity.Providers.OAuth2
 				Name = token.Claims.FirstOrDefault(x => x.Type == "name")?.Value,
 				Email = token.Claims.FirstOrDefault(x => x.Type == "email")?.Value
 			};
+			var refreshTokenText = refreshToken.ValueKind == JsonValueKind.Undefined ? null : refreshToken.GetString();
+			var accessTokenText = accessToken.ValueKind == JsonValueKind.Undefined ? null : accessToken.GetString();
 			return new CallbackResult
 			{
 				IsSuccessful = true, ResultData = resultModel, Claims = token.Claims, ProviderType = ProviderType,
-				Token = token, RefreshToken = refreshToken.GetString(), AccessToken = accessToken.GetString()
+				Token = token, RefreshToken = refreshTokenText, AccessToken = accessTokenText
 			};
 		}
 	}

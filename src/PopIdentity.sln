@@ -5,14 +5,14 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopIdentity.Sample", "PopIdentity.Sample\PopIdentity.Sample.csproj", "{1A0251C4-34EC-488D-9E3C-12517FE01FE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopIdentity", "PopIdentity\PopIdentity.csproj", "{C5634E47-586A-4120-86AC-FDBFC63F2186}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6E00B5C-A982-49C3-8CC3-40D3F49FB2A4}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopIdentity", "PopIdentity\PopIdentity.csproj", "{514B79AB-A73D-46EE-8BFD-96E172F66366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,10 @@ Global
 		{1A0251C4-34EC-488D-9E3C-12517FE01FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A0251C4-34EC-488D-9E3C-12517FE01FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0251C4-34EC-488D-9E3C-12517FE01FE3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C5634E47-586A-4120-86AC-FDBFC63F2186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5634E47-586A-4120-86AC-FDBFC63F2186}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5634E47-586A-4120-86AC-FDBFC63F2186}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5634E47-586A-4120-86AC-FDBFC63F2186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514B79AB-A73D-46EE-8BFD-96E172F66366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514B79AB-A73D-46EE-8BFD-96E172F66366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514B79AB-A73D-46EE-8BFD-96E172F66366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514B79AB-A73D-46EE-8BFD-96E172F66366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
