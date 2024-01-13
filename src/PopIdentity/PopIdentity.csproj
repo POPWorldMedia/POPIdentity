@@ -8,7 +8,7 @@
 	  <PackageId>PopIdentity</PackageId>
 	  <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 	  <RepositoryUrl>https://github.com/POPWorldMedia/POPIdentity</RepositoryUrl>
-	  <Copyright>2023, POP World Media, LLC</Copyright>
+	  <Copyright>2024, POP World Media, LLC</Copyright>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <Version>4.4.0</Version>
   </PropertyGroup>
