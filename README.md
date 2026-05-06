@@ -23,6 +23,6 @@ POP Identity is available as a Nuget package:
 https://www.nuget.org/packages/PopIdentity/ 
 
 ## CI build 
-https://www.myget.org/F/popidentity/api/v3/index.json 
+https://nuget.pkg.github.com/POPWorldMedia/index.json 
 
 [![Build status](https://popw.visualstudio.com/POP%20Identity/_apis/build/status/POP%20Identity-ASP.NET%20Core-CI)](https://popw.visualstudio.com/POP%20Identity/_build/latest?definitionId=3)
